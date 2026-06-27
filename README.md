@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EstateFlow CRM
+
+EstateFlow is a production-ready, cloud-based, mobile-first Real Estate CRM designed for sales teams to manage leads, schedule follow-ups, organize properties, and track field attendance seamlessly.
+
+## Features
+
+- **Mobile-First Design**: Fully responsive interface optimized for mobile with a bottom navigation bar, touch-friendly targets, and smooth sliding animations.
+- **Lead Management**: Complete lead tracking with status pipelines, temperature indicators, and automated assignment options (round-robin).
+- **Property Catalog**: Manage properties with image galleries, detailed specifications (BHK, size, amenities), and one-click sharing links.
+- **Follow-up Reminders**: Tabbed dashboard for overdue, today's, and upcoming follow-ups, with quick actions.
+- **Communication Integration**: 
+  - One-click WhatsApp deep-linking.
+  - Click-to-call integration.
+  - Twilio Voice bridge / webhook infrastructure included.
+- **Team & Attendance Management**: GPS-based check-in/out for field executives with late-arrival detection.
+- **Social Media Calendar**: Manage your team's social media content, schedule posts, and generate captions with AI.
+- **Multi-Tenant Architecture**: Built on Supabase with Row Level Security (RLS) ensuring strict isolation across different organizations.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4, shadcn/ui
+- **Database & Auth**: Supabase (Postgres)
+- **Storage**: Supabase Storage
+- **Hosting Strategy**: Vercel ready
+
+## Prerequisites
+
+- Node.js 18+
+- Supabase Project (Database, Auth, Storage)
+
+## Environment Variables
+
+Create a `.env.local` file based on the provided `.env.example`:
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-key
+
+# Integrations (Optional)
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_PHONE_NUMBER=
+RESEND_API_KEY=
+OPENAI_API_KEY=
+WEBHOOK_SECRET=your_secure_webhook_secret
+```
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Apply Migrations**:
+   Run the SQL scripts in `supabase/migrations/` sequentially on your Supabase SQL Editor.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Seed Database**:
+   Populate your database with sample data:
+   ```bash
+   npx tsx scripts/seed.ts
+   ```
+   *Login credentials for the sample admin user will be printed in the console.*
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. **Open App**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+## Architecture Notes
 
-To learn more about Next.js, take a look at the following resources:
+- **Adapters**: External services (Twilio, Email, AI) use a clean adapter pattern (`src/services/`) ensuring UI components remain decoupled.
+- **Dry-Run Mode**: Services like messaging and calling default to "dry-run" mode, logging to the console until API keys are provided.
+- **Webhooks**: Located in `src/app/api/webhooks/`, ready to receive leads from platforms like Facebook Ads, MagicBricks, Housing.com, or Zapier.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License.
